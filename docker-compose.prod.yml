@@ -1,22 +1,26 @@
 version: "3.9"
 
 services:
-  mongo:
-    image: mongo:4.4
-    container_name: mongo_prod
-    restart: always
+  frontend-prod:
+    build: ./frontend
+    container_name: frontend-prod
+    depends_on:
+      - backend-prod
+
+  backend-prod:
+    build: ./backend
+    container_name: backend-prod
+    environment:
+      - MONGO_URI=mongodb://mongo-prod:27017/listItemDB
+      - PORT=3000
+    depends_on:
+      - mongo-prod
+
+  mongo-prod:
+    image: mongo
+    container_name: mongo-prod
     volumes:
       - mongoprod:/data/db
-
-  app:
-    image: todolist:v1
-    container_name: todolist_app_prod
-    restart: always
-    environment:
-      - NODE_ENV=production
-      - MONGO_URI=mongodb://mongo:27017/listItemDB
-    depends_on:
-      - mongo
 
 volumes:
   mongoprod:

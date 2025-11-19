@@ -1,25 +1,32 @@
 version: "3.9"
 
 services:
-  mongo:
-    image: mongo:4.4
-    container_name: mongo_qa
-    restart: always
+  frontend-qa:
+    build: ./frontend
+    container_name: frontend-qa
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend-qa
+
+  backend-qa:
+    build: ./backend
+    container_name: backend-qa
+    environment:
+      - MONGO_URI=mongodb://mongo-qa:27017/listItemDB
+      - PORT=3000
+    ports:
+      - "3001:3000"
+    depends_on:
+      - mongo-qa
+
+  mongo-qa:
+    image: mongo
+    container_name: mongo-qa
     ports:
       - "27017:27017"
     volumes:
       - mongoqa:/data/db
-
-  app:
-    image: todolist:v1
-    container_name: todolist_app_qa
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/listItemDB
-    depends_on:
-      - mongo
 
 volumes:
   mongoqa:
