@@ -26,7 +26,7 @@ Este documento registra el cumplimiento de los requisitos del integrador y las d
 - [ ] Deploy automático a QA si los tests pasan
 - [ ] Pruebas de integración en QA con Cypress
 - [ ] Aprobación manual para PROD
-- [ ] Deploy a PROD
+- [ ] Deploy a PROD usando la misma imagen
 
 ### Tests
 - [ ] Unit tests con Jest
@@ -56,6 +56,10 @@ Este documento registra el cumplimiento de los requisitos del integrador y las d
 - Docker para deploys
 - Azure DevOps Pipelines para CI/CD
 
+### Imágenes y despliegue
+- Una sola imagen Docker para todos los entornos  
+  Configurada mediante variables de entorno.
+
 ---
 
 ## 📅 Avances por Fase
@@ -68,17 +72,16 @@ Este documento registra el cumplimiento de los requisitos del integrador y las d
 - [x] Documentación base creada
 
 ### Fase 2 – Dockerización
-- [ ] Crear Dockerfile
-- [ ] Crear docker-compose para QA y Prod
-- [ ] Variables de entorno
-- [ ] Creo imagen y la pruebo local
+- [x] Crear Dockerfile
+- [x] Crear docker-compose para QA y Prod
+- [x] Variables de entorno integradas
+- [x] Creo imagen y la pruebo local
 
 ### Fase 3 – Calidad del Proyecto
-- [ ] ESLint configurado
-- [ ] Prettier configurado
-- [ ] Jest instalado
+- [ ] Jest instalado y configurado
 - [ ] Primer test unitario funcionando
 - [ ] Coverage funcionando
+- [ ] ESLint + Prettier instalado y configurado
 
 ### Fase 4 - CI: Build Pipeline en Azure DevOps
 - [ ] Construir imagen Docker en CI
