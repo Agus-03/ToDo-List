@@ -14,7 +14,10 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(express.static("public"));
-mongoose.connect("mongodb://localhost:27017/listItemDB");
+mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/listItemDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 const itemSchema = { //each todo item will just have a string
   name: String
 }
@@ -146,6 +149,5 @@ app.get("/about", function(req, res) { //about list
   res.render("about");
 });
 
-app.listen(process.env.PORT || 3000, function() { //this runs on heroku and local port
-  console.log("Server started on port 3000");
-});
+module.exports = app;
+

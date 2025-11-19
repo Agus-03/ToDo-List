@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: mongo_prod
+    restart: always
+    volumes:
+      - mongoprod:/data/db
+
+  app:
+    image: todolist:v1
+    container_name: todolist_app_prod
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongo:27017/listItemDB
+    depends_on:
+      - mongo
+
+volumes:
+  mongoprod:
