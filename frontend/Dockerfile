@@ -1,4 +1,4 @@
 FROM nginx:alpine
 
-COPY ./public /usr/share/nginx/html
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./backend/public /usr/share/nginx/html
+COPY ./frontend/nginx.qa.conf /etc/nginx/conf.d/default.conf

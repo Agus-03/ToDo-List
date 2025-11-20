@@ -1,20 +1,31 @@
-# ---- Etapa 1: Imagen base ----
-FROM node:20-alpine AS base
+# ---- ETAPA 1: Construcción (Build Stage) ----
+FROM node:20-alpine AS builder
 
-# Crear directorio de trabajo dentro del contenedor
+# Establecemos el directorio de trabajo
 WORKDIR /app
 
-# Copiamos el package.json y package-lock.json
-COPY package*.json ./
+# --- ¡CORRECCIÓN DE RUTA CLAVE! ---
+# Copiamos package.json desde su ubicación real (./backend/) al directorio actual (./).
+COPY ./backend/package*.json ./
 
-# Instalamos dependencias (solo producción por ahora)
-RUN npm install --production
+# Instalamos dependencias
+RUN npm install
 
-# Copiamos el resto del código
-COPY . .
+# Copiamos el resto del código (./backend/.) al directorio de trabajo (/app)
+COPY ./backend/. .
 
-# Exponemos el puerto en el que corre la app
+
+# ---- ETAPA 2: Producción (Runtime Stage) ----
+FROM node:20-slim
+
+# Establecemos el directorio de trabajo
+WORKDIR /app
+
+# Copiamos todo lo construido desde la etapa 'builder'
+COPY --from=builder /app /app
+
+ENV NODE_ENV production
+
 EXPOSE 3000
 
-# Comando para ejecutar el servidor
 CMD ["npm", "start"]

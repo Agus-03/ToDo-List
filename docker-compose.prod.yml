@@ -2,13 +2,21 @@ version: "3.9"
 
 services:
   frontend-prod:
-    build: ./frontend
+    # CORRECCIÓN: Usa la raíz del proyecto como contexto (.).
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
     container_name: frontend-prod
+    ports:
+      - "80:80" 
     depends_on:
       - backend-prod
 
   backend-prod:
-    build: ./backend
+    # CORRECCIÓN: Usa la raíz del proyecto como contexto (.).
+    build: 
+      context: .
+      dockerfile: ./backend/Dockerfile
     container_name: backend-prod
     environment:
       - MONGO_URI=mongodb://mongo-prod:27017/listItemDB
