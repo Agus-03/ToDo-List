@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  frontend-prod:
+    # --- Usa la imagen subida ---
+    image: nicxrxjas/todo-list-frontend:1.0.0-prod
+    container_name: frontend-prod
+    ports:
+      - "80:80" 
+    depends_on:
+      - backend-prod
+
+  backend-prod:
+    # --- Usa la imagen subida ---
+    image: nicxrxjas/todo-list-backend:1.0.0-prod
+    container_name: backend-prod
+    environment:
+      # Las variables de entorno para la base de datos de producción
+      - MONGO_URI=mongodb://mongo-prod:27017/listItemDB
+      - PORT=3000
+    depends_on:
+      - mongo-prod
+
+  mongo-prod:
+    image: mongo
+    container_name: mongo-prod
+    volumes:
+      - mongoprod:/data/db
+
+volumes:
+  mongoprod:
