@@ -1,22 +1,35 @@
 version: "3.9"
 
 services:
-  mongo:
-    image: mongo:4.4
-    container_name: mongo_prod
-    restart: always
+  frontend-prod:
+    # Corrección: Establece el contexto en la raíz (.).
+    # Apunta al Dockerfile específico de Producción.
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile.prod 
+    container_name: frontend-prod
+    ports:
+      - "80:80" 
+    depends_on:
+      - backend-prod
+
+  backend-prod:
+    # Usa la raíz como contexto para que las rutas funcionen.
+    build: 
+      context: .
+      dockerfile: ./backend/Dockerfile
+    container_name: backend-prod
+    environment:
+      - MONGO_URI=mongodb://mongo-prod:27017/listItemDB
+      - PORT=3000
+    depends_on:
+      - mongo-prod
+
+  mongo-prod:
+    image: mongo
+    container_name: mongo-prod
     volumes:
       - mongoprod:/data/db
-
-  app:
-    image: todolist:v1
-    container_name: todolist_app_prod
-    restart: always
-    environment:
-      - NODE_ENV=production
-      - MONGO_URI=mongodb://mongo:27017/listItemDB
-    depends_on:
-      - mongo
 
 volumes:
   mongoprod:

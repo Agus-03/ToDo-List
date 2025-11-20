@@ -1,0 +1,7 @@
+FROM nginx:alpine
+
+# Copiamos el contenido estático desde la carpeta public del backend
+COPY ./backend/public /usr/share/nginx/html
+
+# Copiamos el archivo de configuración ESPECÍFICO DE QA.
+COPY ./frontend/nginx.qa.conf /etc/nginx/conf.d/default.conf
