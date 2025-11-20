@@ -2,9 +2,11 @@ version: "3.9"
 
 services:
   frontend-qa:
+    # Corrección: Establece el contexto en la raíz (.).
+    # Apunta al Dockerfile específico de QA.
     build:
       context: .
-      dockerfile: ./frontend/Dockerfile
+      dockerfile: ./frontend/Dockerfile.qa 
     container_name: frontend-qa
     ports:
       - "8080:80"
@@ -12,7 +14,10 @@ services:
       - backend-qa
 
   backend-qa:
-    build: ./backend
+    # Usa la raíz como contexto para que las rutas funcionen.
+    build: 
+      context: .
+      dockerfile: ./backend/Dockerfile
     container_name: backend-qa
     environment:
       - MONGO_URI=mongodb://mongo-qa:27017/listItemDB

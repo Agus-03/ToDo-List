@@ -2,10 +2,11 @@ version: "3.9"
 
 services:
   frontend-prod:
-    # CORRECCIÓN: Usa la raíz del proyecto como contexto (.).
+    # Corrección: Establece el contexto en la raíz (.).
+    # Apunta al Dockerfile específico de Producción.
     build:
       context: .
-      dockerfile: ./frontend/Dockerfile
+      dockerfile: ./frontend/Dockerfile.prod 
     container_name: frontend-prod
     ports:
       - "80:80" 
@@ -13,7 +14,7 @@ services:
       - backend-prod
 
   backend-prod:
-    # CORRECCIÓN: Usa la raíz del proyecto como contexto (.).
+    # Usa la raíz como contexto para que las rutas funcionen.
     build: 
       context: .
       dockerfile: ./backend/Dockerfile
