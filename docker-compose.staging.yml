@@ -2,30 +2,49 @@ version: "3.9"
 
 services:
   frontend-staging:
-    # Apunta a la imagen ya subida de QA
     image: nicxrxjas/todo-list-frontend:1.0.0-qa 
     container_name: frontend-staging
     ports:
-      - "8081:80" # Usamos un puerto diferente (8081) para evitar conflicto con el 8080 local
+      - "8081:80" 
     depends_on:
       - backend-staging
+    
+    # El frontend usa la red por defecto
+    networks:
+      default:
+        aliases:
+          - frontend-staging
 
   backend-staging:
-    # Apunta a la imagen ya subida de QA
     image: nicxrxjas/todo-list-backend:1.0.0-qa 
     container_name: backend-staging
     environment:
-      # Las variables de entorno para el entorno de prueba
       - MONGO_URI=mongodb://mongo-staging:27017/listItemDB
       - PORT=3000
     depends_on:
       - mongo-staging
+      
+    # --- CORRECCIÓN CLAVE AQUÍ ---
+    # Asignamos un alias al servicio backend-staging
+    # para que sea conocido como "backend-qa" dentro de la red.
+    networks:
+      default:
+        aliases:
+          - backend-qa # <--- ¡Este es el nombre que Nginx espera!
+          - backend-staging
 
   mongo-staging:
     image: mongo
     container_name: mongo-staging
     volumes:
       - mongostaging:/data/db
+      
+    # El servicio de Mongo también debe estar en la red por defecto
+    networks:
+      default:
+        aliases:
+          - mongo-staging
+          - mongo-qa # Opcional: para mantener consistencia de nombres
 
 volumes:
   mongostaging:
